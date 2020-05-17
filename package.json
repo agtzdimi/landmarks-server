@@ -9,12 +9,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "~4.11.x",
     "kerberos": "~0.0.x",
     "parse": "~1.11.1",
     "parse-dashboard": "^2.1.0",
-    "parse-server": "~2.7.4"
+    "parse-server": "~2.7.4",
+    "sharp": "^0.25.2"
   },
   "scripts": {
     "start": "node index.js"
