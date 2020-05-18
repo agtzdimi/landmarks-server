@@ -51,7 +51,7 @@ router.post(
       landmark.save(null, { sessionToken: req.headers.sessiontoken });
       return res.status(200).json({
         ok: true,
-        message: `Uploaded image for ${objectId}`,
+        message: `Uploaded image for ${landmark.get("title")}`,
       });
     } catch (error) {
       return res.status(500).json({ ok: false, message: error.message });
