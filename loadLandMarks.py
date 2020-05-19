@@ -39,7 +39,7 @@ url = '{}/{}'.format(os.getenv("PUBLIC_SERVER_URL"), endpoint)
 
 startingMessage = """
 Starting Configuration...
-All Status Codes should be 201!
+All Status Codes should be with code 200 or 201
 
 Creating Guest User...
 
