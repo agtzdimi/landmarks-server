@@ -13,8 +13,8 @@ Parse Files in the MongoDB.
 
 The Node.JS version used for this Project is `10.16.0`
 The npm version is: `6.5.0`
-Parse server v2.7.4
-Parse SDK 1.1.1
+Parse server `v2.7.4`
+Parse SDK `1.1.1`
 MongoDB Atlas does not support on its free edition the `v3.6`
 In essence, a local MongoDB should be installed `v3.6`. The newest versions (v4+) will produce errors in certain system functionalities and should be avoided
 
@@ -50,6 +50,7 @@ Create a file named `.env` to store your server's configuration. The following f
 ### Starting parse server
 
 Install modules/libraries: `npm i`
+
 Start the server with: `npm start`
 
 ### Python Installation Script
@@ -82,7 +83,11 @@ Example call:
 ## Acknowledgments
 
 Official Parse Server (Javascript SDK) Documentation: [Link](https://docs.parseplatform.org/js/guide/)
+
 Read the full Parse Server guide here: [Github Link](https://github.com/ParsePlatform/parse-server/wiki/Parse-Server-Guide)
+
 The forked repo can be found in: [parse-server](https://github.com/ParsePlatform/parse-server)
+
 Parse Dashboard Specifications: [Github Link](https://github.com/parse-community/parse-dashboard)
+
 A useful article for sharp and multer to upload images: [Link](https://bezkoder.com/node-js-upload-resize-multiple-images/)
