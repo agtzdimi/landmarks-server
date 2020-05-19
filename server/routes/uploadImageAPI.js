@@ -14,7 +14,7 @@ const fileTypes = (req, file, cb) => {
   }
 };
 
-// Limit to 5MB files
+// Limit to 5MB files and jpeg/png images
 const uploadOptions = multer({
   storage: storage,
   limits: {
@@ -36,25 +36,28 @@ router.post(
       await parseImage.save();
       const resizedImage = await sharp(req.file.buffer)
         .rotate()
-        .resize(250, 250)
+        .resize(
+          +process.env.PHOTO_WIDTH || 250,
+          +process.env.PHOTO_HEIGHT || 250
+        )
         .toBuffer();
       const encodedThumb = resizedImage.toString("base64");
       const parseImageThumb = new Parse.File("thumb" + req.file.originalname, {
         base64: encodedThumb,
       });
       await parseImageThumb.save();
-      const Landmark = Parse.Object.extend("Landmarks");
+      const Landmark = Parse.Object.extend(process.env.LANDMARK_CLASS_NAME);
       const query = new Parse.Query(Landmark);
       const landmark = await query.get(objectId);
       landmark.set("photo", parseImage);
       landmark.set("photo_thumb", parseImageThumb);
       landmark.save(null, { sessionToken: req.headers.sessiontoken });
       return res.status(200).json({
-        ok: true,
+        status: "success",
         message: `Uploaded image for ${landmark.get("title")}`,
       });
     } catch (error) {
-      return res.status(500).json({ ok: false, message: error.message });
+      return res.status(500).json({ status: "error", message: error.message });
     }
   }
 );
@@ -64,7 +67,7 @@ router.use(function(err, req, res, next) {
   if (err.code === "LIMIT_FILE_SIZE") {
     return res
       .status(500)
-      .send({ ok: "false", message: "File is too big (up to 5mb allowed)" });
+      .send({ status: "error", message: "Maximum allowed file size: 5mb" });
   }
 });
 

@@ -1,5 +1,5 @@
-// Example express application adding the parse-server module to expose Parse
-// compatible API routes.
+// Express application initially forked from parse-server-example project.
+// It contains a REST API to cover the functionalities needed for Travel Blog application
 
 const express = require("express");
 const ParseServer = require("parse-server").ParseServer;
@@ -9,6 +9,7 @@ const ParseDashboard = require("parse-dashboard");
 const cors = require("cors");
 
 const databaseUri = process.env.DB_URI;
+// Import the custom API routes
 const landmarkRouter = require("./server/routes/updateLandmarkAPI");
 const imgRouter = require("./server/routes/uploadImageAPI");
 
@@ -21,7 +22,7 @@ if (!databaseUri) {
 const api = new ParseServer({
   databaseURI: process.env.DB_URI,
   appId: process.env.APP_ID || "myAppId",
-  masterKey: process.env.MASTER_KEY || "", //Add your master key here. Keep it secret!
+  masterKey: process.env.MASTER_KEY || "masterKey",
   serverURL: process.env.SERVER_URL + "/parse" || "http://localhost:1337/parse", // Don't forget to change to https if needed
   liveQuery: {
     classNames: ["Posts", "Comments"], // List of classes to support for query subscriptions
@@ -54,6 +55,7 @@ httpServer.listen(port, function() {
 // Serve the Parse API on the /parse URL prefix
 const mountPath = process.env.PARSE_MOUNT || "/parse";
 
+// Cors was used to accept * for the file uploading service
 app.use(cors({ origin: "*" }));
 app.use(mountPath, imgRouter);
 app.use(mountPath, landmarkRouter);

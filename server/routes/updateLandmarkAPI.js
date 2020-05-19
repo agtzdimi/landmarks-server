@@ -4,7 +4,9 @@ const Parse = require("parse/node");
 
 router.get("/landmarks", async (req, res) => {
   try {
-    const Landmark = Parse.Object.extend("Landmarks");
+    const Landmark = Parse.Object.extend(
+      process.env.LANDMARK_CLASS_NAME || "Landmarks"
+    );
     const query = new Parse.Query(Landmark);
     query.select(
       "_id",
@@ -27,7 +29,9 @@ router.put("/landmarks/:landmark", async (req, res) => {
   try {
     const editingLandmark = req.query;
     const objectId = req.params.landmark;
-    const Landmark = Parse.Object.extend("Landmarks");
+    const Landmark = Parse.Object.extend(
+      process.env.LANDMARK_CLASS_NAME || "Landmarks"
+    );
     const query = new Parse.Query(Landmark);
     const currentLandmark = await query.get(objectId);
 

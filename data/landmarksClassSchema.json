@@ -1,0 +1,29 @@
+{
+	"className": "",
+	"fields": {
+		"title": {
+			"type": "String"
+		},
+		"description": {
+			"type": "String"
+		},
+		"url": {
+			"type": "String"
+		},
+		"location": {
+			"type": "Array"
+		},
+		"photo": {
+			"type": "File"
+		},
+		"photo_thumb": {
+			"type": "File"
+		},
+		"short_info": {
+			"type": "String"
+		},
+		"order": {
+			"type": "Number"
+		}
+	}
+}

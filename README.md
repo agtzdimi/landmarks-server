@@ -1,176 +1,88 @@
-# parse-server-example
+# travel-blog-server
 
-[![Join The Conversation](https://img.shields.io/discourse/https/community.parseplatform.org/topics.svg)](https://community.parseplatform.org/c/parse-server)
-[![Backers on Open Collective](https://opencollective.com/parse-server/backers/badge.svg)][open-collective-link]
-[![Sponsors on Open Collective](https://opencollective.com/parse-server/sponsors/badge.svg)][open-collective-link]
-[![License][license-svg]][license-link]
-[![Twitter Follow](https://img.shields.io/twitter/follow/ParsePlatform.svg?label=Follow%20us%20on%20Twitter&style=social)](https://twitter.com/intent/follow?screen_name=ParsePlatform)
+## Introduction
 
-Example project using the [parse-server](https://github.com/ParsePlatform/parse-server) module on Express.
+Travel Blog Server project was initially cloned from: [parse-server](https://github.com/ParsePlatform/parse-server)
+The Project is using ExpressJS module to expose an API for [Travel Blog](https://github.com/agtzdimi/travel-blog)
 
-Read the full Parse Server guide here: https://github.com/ParsePlatform/parse-server/wiki/Parse-Server-Guide
+The main purpose of the server is to facilitate the Travel Blog Graphical User Interface (GUI) to retrieve a list of the
+registered assets in the MongoDB storage. Furthermore, the server supports the uploading of images which will be saved as
+Parse Files in the MongoDB.
 
-### For Local Development
+## Prerequisites
 
-* Make sure you have at least Node 4.3. `node --version`
-* Clone this repo and change directory to it.
-* `npm install`
-* Install mongo locally using http://docs.mongodb.org/master/tutorial/install-mongodb-on-os-x/
-* Run `mongo` to connect to your database, just to make sure it's working. Once you see a mongo prompt, exit with Control-D
-* Run the server with: `npm start`
-* By default it will use a path of /parse for the API routes.  To change this, or use older client SDKs, run `export PARSE_MOUNT=/1` before launching the server.
-* You now have a database named "dev" that contains your Parse data
-* Install ngrok and you can test with devices
+The Node.JS version used for this Project is `10.16.0`
+The npm version is: `6.5.0`
+Parse server v2.7.4
+Parse SDK 1.1.1
+MongoDB Atlas does not support on its free edition the `v3.6`
+In essence, a local MongoDB should be installed `v3.6`. The newest versions (v4+) will produce errors in certain system functionalities and should be avoided
 
-### Getting Started With Heroku + mLab Development
+## Installation
 
-#### With the Heroku Button
+### MongoDB
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+To install mongoDB `v3.6` execute in Ubuntu 18.04 (Bionic Beaver):
 
-#### Without It
+- `sudo apt update`
+- `sudo apt install mongodb`
+- `sudo systemctl start mongodb`
+- `sudo systemctl status mongodb`
 
-* Clone the repo and change directory to it
-* Log in with the [Heroku Toolbelt](https://toolbelt.heroku.com/) and create an app: `heroku create`
-* Use the [mLab addon](https://elements.heroku.com/addons/mongolab): `heroku addons:create mongolab:sandbox --app YourAppName`
-* By default it will use a path of /parse for the API routes.  To change this, or use older client SDKs, run `heroku config:set PARSE_MOUNT=/1`
-* Deploy it with: `git push heroku master`
+### Environment file
 
-### Getting Started With AWS Elastic Beanstalk
+Create a file named `.env` to store your server's configuration. The following fields are the mandatory configuration for the file:
 
-#### With the Deploy to AWS Button
+- DB_URI -> The MongoDB URI
+- APP_ID -> The Application ID
+- MASTER_KEY -> Your Master Key
+- PUBLIC_SERVER_URL -> The parse server URL for example (http://localhost:5000/parse)
+- SERVER_URL -> The server URL for example (http://localhost:5000)
+- SERVER_PORT
+- PARSE_MOUNT -> The parse endpoint for example ('/parse')
+- LANDMARK_CLASS_NAME -> The class name where the landmarks will be installed
+- PHOTO_WIDTH -> The thumbnail photo_width. Highly suggested to be used with 250px width, as the development is done with that resolution
+- PHOTO_HEIGHT -> The thumbnail photo_width. Highly suggested to be used with 250px height, as the development is done with that resolution
+- APP_NAME -> The Application Name
+- ADMIN_USER -> The user that will be defined for the parse dashboard
+- ADMIN_PASSWORD -> The password of parse dashboard user
 
-<a title="Deploy to AWS" href="https://console.aws.amazon.com/elasticbeanstalk/home?region=us-west-2#/newApplication?applicationName=ParseServer&solutionStackName=Node.js&tierName=WebServer&sourceBundleUrl=https://s3.amazonaws.com/elasticbeanstalk-samples-us-east-1/eb-parse-server-sample/parse-server-example.zip" target="_blank"><img src="http://d0.awsstatic.com/product-marketing/Elastic%20Beanstalk/deploy-to-aws.png" height="40"></a>
+### Starting parse server
 
-#### Without It
+Install modules/libraries: `npm i`
+Start the server with: `npm start`
 
-* Clone the repo and change directory to it
-* Log in with the [AWS Elastic Beanstalk CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html), select a region, and create an app: `eb init`
-* Create an environment and pass in MongoDB URI, App ID, and Master Key: `eb create --envvars DATABASE_URI=<replace with URI>,APP_ID=<replace with Parse app ID>,MASTER_KEY=<replace with Parse master key>`
+### Python Installation Script
 
-### Getting Started With Microsoft Azure App Service
+After the installation/configuration of mongoDB and .env we have a working server session.
+To smooth the installation procedure a python script has been implemented to create the necessary users/permissions and store the landmarks information
 
-#### With the Deploy to Azure Button
+To use the python script the following packages should be installed:
 
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.ParseServer)
+- `sudo pip3.6 install python-dotenv`
+- `sudo pip3.6 install argparse`
+- `sudo pip3.6 install requests`
 
-Detailed information is available here:
-* [Parse Server with Azure Managed Services](https://azure.microsoft.com/en-us/marketplace/partners/microsoft/parseserver/)
-* [Parse Server Azure Blog Post](https://azure.microsoft.com/en-us/blog/announcing-the-publication-of-parse-server-with-azure-managed-services/)
+The python script needs 2 input files:
 
+- The datafile with the Landmarks basic information:
 
-### Getting Started With Google App Engine
+  - `title`
+  - `description`
+  - `location` (array of coordinates \[lat,lon\])
+  - `short_info`
+  - `url`
+  - `order` the order number it should appear
 
-1. Clone the repo and change directory to it 
-1. Create a project in the [Google Cloud Platform Console](https://console.cloud.google.com/).
-1. [Enable billing](https://console.cloud.google.com/project/_/settings) for your project.
-1. Install the [Google Cloud SDK](https://cloud.google.com/sdk/).
-1. Setup a MongoDB server.  You have a few options:
-  1. Create a Google Compute Engine virtual machine with [MongoDB pre-installed](https://cloud.google.com/launcher/?q=mongodb).
-  1. Use [mLab](https://mlab.com/google/) to create a free MongoDB deployment on Google Cloud Platform (only US-central).
-1. Modify `app.yaml` to update your environment variables.
-1. Delete `Dockerfile`
-1. Deploy it with `gcloud preview app deploy`
+- The class schema where all the above fields are defined with their types and also the `photo_thumb` and `photo` fields are defined as Parse Files
 
-A detailed tutorial is available here:
-[Running Parse server on Google App Engine](https://cloud.google.com/nodejs/resources/frameworks/parse-server)
+Example call:
+`python3.6 loadLandMarks.py --dataFile ./data/DubaiLandmarks.json --classSchema ./data/landmarksClassSchema.json`
 
-### Getting Started With Scalingo
+## Acknowledgments
 
-#### With the Scalingo button
-
-[![Deploy to Scalingo](https://cdn.scalingo.com/deploy/button.svg)](https://my.scalingo.com/deploy)
-
-#### Without it
-
-* Clone the repo and change directory to it
-* Log in with the [Scalingo CLI](http://cli.scalingo.com/) and create an app: `scalingo create my-parse`
-* Use the [Scalingo MongoDB addon](https://scalingo.com/addons/scalingo-mongodb): `scalingo addons-add scalingo-mongodb free`
-* Setup MongoDB connection string: `scalingo env-set DATABASE_URI='$SCALINGO_MONGO_URL'`
-* By default it will use a path of /parse for the API routes. To change this, or use older client SDKs, run `scalingo env-set PARSE_MOUNT=/1`
-* Deploy it with: `git push scalingo master`
-
-### Getting Started With OpenShift Online (Next Gen)
-
-1. Register for a free [OpenShift Online (Next Gen) account](http://www.openshift.com/devpreview/register.html)
-1. Create a project in the [OpenShift Online Console](https://console.preview.openshift.com/console/).
-1. Install the [OpenShift CLI](https://docs.openshift.com/online/getting_started/beyond_the_basics.html#btb-installing-the-openshift-cli).
-1. Add the Parse Server template to your project: `oc create -f https://raw.githubusercontent.com/ParsePlatform/parse-server-example/master/openshift.json`
-1. Deploy Parse Server from the web console
-  1. Open your project in the [OpenShift Online Console](https://console.preview.openshift.com/console/):
-  1. Click **Add to Project** from the top navigation
-  1. Scroll down and select **NodeJS > Parse Server**
-  1. (Optionally) Update the Parse Server settings (parameters)
-  1. Click **Create**
-
-A detailed tutorial is available here:
-[Running Parse Server on OpenShift Online (Next Gen)](https://blog.openshift.com/parse-server/)
-
-# Using it
-
-Before using it, you can access a test page to verify if the basic setup is working fine [http://localhost:1337/test](http://localhost:1337/test).
-Then you can use the REST API, the JavaScript SDK, and any of our open-source SDKs:
-
-Example request to a server running locally:
-
-```curl
-curl -X POST \
-  -H "X-Parse-Application-Id: myAppId" \
-  -H "Content-Type: application/json" \
-  -d '{"score":1337,"playerName":"Sean Plott","cheatMode":false}' \
-  http://localhost:1337/parse/classes/GameScore
-  
-curl -X POST \
-  -H "X-Parse-Application-Id: myAppId" \
-  -H "Content-Type: application/json" \
-  -d '{}' \
-  http://localhost:1337/parse/functions/hello
-```
-
-Example using it via JavaScript:
-
-```javascript
-Parse.initialize('myAppId','unused');
-Parse.serverURL = 'https://whatever.herokuapp.com';
-
-var obj = new Parse.Object('GameScore');
-obj.set('score',1337);
-obj.save().then(function(obj) {
-  console.log(obj.toJSON());
-  var query = new Parse.Query('GameScore');
-  query.get(obj.id).then(function(objAgain) {
-    console.log(objAgain.toJSON());
-  }, function(err) {console.log(err); });
-}, function(err) { console.log(err); });
-```
-
-Example using it on Android:
-```java
-//in your application class
-
-Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-  .applicationId("myAppId")
-  .server("http://myServerUrl/parse/")   // '/' important after 'parse'
-  .build());
-
-ParseObject testObject = new ParseObject("TestObject");
-testObject.put("foo", "bar");
-testObject.saveInBackground();
-```
-Example using it on iOS (Swift):
-```swift
-//in your AppDelegate
-
-Parse.initializeWithConfiguration(ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
-  configuration.server = "https://<# Your Server URL #>/parse/" // '/' important after 'parse'
-  configuration.applicationId = "<# Your APP_ID #>"
-}))
-```
-You can change the server URL in all of the open-source SDKs, but we're releasing new builds which provide initialization time configuration of this property.
-
------
-As of April 5, 2017, Parse, LLC has transferred this code to the parse-community organization, and will no longer be contributing to or distributing this code.
-
-[license-svg]: https://img.shields.io/badge/license-BSD-lightgrey.svg
-[license-link]: LICENSE
-[open-collective-link]: https://opencollective.com/parse-server
+Official Parse Server (Javascript SDK) Documentation: [Link](https://docs.parseplatform.org/js/guide/)
+Read the full Parse Server guide here: [Github Link](https://github.com/ParsePlatform/parse-server/wiki/Parse-Server-Guide)
+The forked repo can be found in: [parse-server](https://github.com/ParsePlatform/parse-server)
+Parse Dashboard Specifications: [Github Link](https://github.com/parse-community/parse-dashboard)
+A useful article for sharp and multer to upload images: [Link](https://bezkoder.com/node-js-upload-resize-multiple-images/)
