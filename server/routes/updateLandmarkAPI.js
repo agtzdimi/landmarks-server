@@ -34,11 +34,16 @@ router.put("/landmarks/:landmark", async (req, res) => {
     );
     const query = new Parse.Query(Landmark);
     const currentLandmark = await query.get(objectId);
-
+    // Create the Number array for the location
+    const location = editingLandmark.location.split(",").map(coord => {
+      coord = coord.replace('"','');
+      return +coord;
+    })
     currentLandmark.set("title", editingLandmark.title);
     currentLandmark.set("short_info", editingLandmark.short_info);
     currentLandmark.set("description", editingLandmark.description);
     currentLandmark.set("url", editingLandmark.url);
+    currentLandmark.set("location", location);
     await currentLandmark.save(null, {
       sessionToken: editingLandmark.sessionToken,
     });
