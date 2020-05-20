@@ -20,6 +20,10 @@ In essence, a local MongoDB should be installed `v3.6`. The newest versions (v4+
 
 ## Installation
 
+### Clone Repository
+
+`git clone https://github.com/agtzdimi/travel-blog-server`
+
 ### MongoDB
 
 To install mongoDB `v3.6` execute in Ubuntu 18.04 (Bionic Beaver):
@@ -55,8 +59,9 @@ Start the server with: `npm start`
 
 ### Python Installation Script
 
-After the installation/configuration of mongoDB and .env we have a working server session.
-To smooth the installation procedure a python script has been implemented to create the necessary users/permissions and store the landmarks information
+After the installation/configuration of mongoDB and .env the server should have already started and have a functional session.
+To smooth the installation of the TravelBlog application a python script has been implemented to create the necessary users/permissions and store the landmarks information
+The python script utilizes the Parse REST API to create a class schema (MongoDB collection) needed for storing the data and populate it.
 
 To use the python script the following packages should be installed:
 
@@ -79,6 +84,11 @@ The python script needs 2 input files:
 
 Example call:
 `python3.6 loadLandMarks.py --dataFile ./data/DubaiLandmarks.json --classSchema ./data/landmarksClassSchema.json`
+
+### Parse Dashboard
+
+The application does also contain the Parse dashboard available in SERVER_URL/dashboard path. The username:password by default is admin:admin
+We can login (locally, remote sessions does not work without an SSL) in Dashboard and check that the Python script worked and installed the data
 
 ## Acknowledgments
 
